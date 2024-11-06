@@ -137,6 +137,13 @@ class AmplifyDataStore extends DataStorePluginInterface
       );
     } on PlatformException catch (e) {
       if (e.code == 'AmplifyException') {
+        if (e.message != null &&
+            e.message!
+                .contains("User-Agent was already configured successfully.")) {
+          logger.debug(
+              'Ignoring Amplify Native User-Agent already configured exception');
+          return;
+        }
         throw AmplifyException.fromMap(
           Map<String, String>.from(e.details as Map),
         );
